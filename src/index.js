@@ -43,6 +43,9 @@ const registerTempEventHandlers = () => {
 document.addEventListener("DOMContentLoaded", () => {
     updateTempDisplay();
     registerTempEventHandlers();
+    updateCityName();//Wave3
+    registerEventHandlers();//Wave3
+
 });
 
 // Change the temperature color based on the temperature.
@@ -85,11 +88,50 @@ const updateCityName = () => {
 //Listeners
 const registerEventHandlers = () => {
     cityNameInput.addEventListener("input", updateCityName);//Wave3
+    currentTempButton.addEventListener("click", getRealtimeTemp)
 };
 
 
-//Page loading tasks
-document.addEventListener("DOMContentLoaded", () => {
-    updateCityName();//Wave3
-    registerEventHandlers();//Wave3
-});
+
+
+//----------WAVE 4 ----------
+//connect proxy to website
+const PROXY_URL = "http://127.0.0.1:5000";
+
+//grab the button
+const currentTempButton = document.getElementById("currentTempButton");
+
+//city name -> latitude and longitude from LocationIQ
+const getLatLon = async(city) => {
+    const response = await axios.get(`${PROXY_URL}/location`, {
+        params: { q: city },
+    });
+    const firstResult = response.data[0];
+    return { lat: firstResult.lat, lon: firstResult.lon };
+};
+
+//lat & long -> temp in Kelvin
+const getTempKelvin = async (lat, lon) => {
+    const response = await axios.get(`${PROXY_URL}/weather`, {
+        params: { lat: lat, lon: lon},
+    });
+    return response.data.main.temp;
+};
+
+//Kelvin -> Fahrenheit
+const kelvinToFahrenheit = (kelvin) => {
+    return Math.round((kelvin - 273.15) * (9/5) + 32);
+};
+
+//click the button
+const getRealtimeTemp = async () => {
+    try {
+        const city = headerCityName.textContent;
+        const { lat, lon } = await getLatLon(city);
+        const kelvin = await getTempKelvin(lat, lon);
+        temperature = kelvinToFahrenheit(kelvin);
+        updateTempDisplay();
+    } catch (error) {
+        console.log("Couldn't get the temperature:", error);
+    }
+};
