@@ -96,7 +96,7 @@ const registerEventHandlers = () => {
 
 //----------WAVE 4 ----------
 //connect proxy to website
-const PROXY_URL = "http://127.0.0.1:5000";
+const PROXY_URL = "http://127.0.0.1:5001";
 
 //grab the button
 const currentTempButton = document.getElementById("currentTempButton");
