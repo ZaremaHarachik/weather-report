@@ -3,7 +3,7 @@
 h2 {
     margin: 0 auto 2rem auto;
 }
-  
+
 body {
 display: grid;
 grid-template-columns: 1fr 2fr;
@@ -69,6 +69,20 @@ grid-row: 3;
 
 .city-name__section {
 grid-row: 4;
+}
+
+/* Get Realtime Temperature button */
+#currentTempButton {
+    cursor: pointer;                       /* pointing-hand cursor on hover */
+    transition: background-color 0.2s;     /* smooth color change */
+}
+
+#currentTempButton:hover {
+    background-color: #1655cc;             /* slightly darker blue on hover */
+}
+
+#currentTempButton:active {
+    transform: scale(0.97);                /* small "press" effect while clicking */
 }
 
 .garden__section {
